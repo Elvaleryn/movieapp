@@ -2,38 +2,55 @@ import React from 'react';
 import { connect } from 'react-redux'
 import Filter from '../components/Filter'
 import {
-  BrowserRouter as Router,
-  Route, Link
+	BrowserRouter as Router,
+	Route, Link
 } from 'react-router-dom'
+import { Card, Button, Row, Col, CardDeck, Container, CardGroup } from 'react-bootstrap'
+
 
 const Movies = (props) => {
-	
-	const show = props.visibleMovies.map(movie => 
-		<li key={movie.id}>
-			<Link to={`/search/${movie.id}`}>{movie.title} {movie.vote_average}<button>Add to Favorites</button></Link>
-		</li>)
+	const imgURL = 'https://image.tmdb.org/t/p/w185';
 
-  return (
+	const show = props.visibleMovies.map(movie =>
+		<Col xs={12} md={3}>
+			<Card border="dark" style={{ width: '18rem' }}>
+				<Link to={`/popular/${movie.id}`}>
+					<Card.Img variant="top" src={imgURL + movie.poster_path} alt='movie poster' />
+				</Link>
+				<Card.Body>
+					<Card.Title>{movie.title}</Card.Title>
+					<Card.Text>
+						IMDB:  {movie.vote_average}
+					</Card.Text>
+					<Button variant="primary">Go somewhere</Button>
+				</Card.Body>
+			</Card>
+		</Col>
+	)
+
+	return (
 		<div>
 			<Filter />
-			{show}
+			<Row>
+				{show}
+			</Row>
 		</div>
-  )
+	)
 }
 
-const moviesToShow = ({movies, filter}) => {
-  return movies.filter(movie => movie.title.toLowerCase().includes(filter.toLowerCase()))
+const moviesToShow = ({ movies, filter }) => {
+	return movies.filter(movie => movie.title.toLowerCase().includes(filter.toLowerCase()))
 }
 
 const mapStateToProps = (state) => {
 	return {
-    visibleMovies: moviesToShow(state),
+		visibleMovies: moviesToShow(state),
 		filter: state.filter
-  }
+	}
 }
 
 export default connect(
-  mapStateToProps, null
+	mapStateToProps, null
 )(Movies)
 
 
