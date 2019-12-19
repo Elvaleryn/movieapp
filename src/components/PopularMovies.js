@@ -14,18 +14,19 @@ const PopularMovies = (props) => {
 
 	const show = popular.map(movie =>
 		<Col xs={12} md={3}>
-			<Card border="dark" style={{ width: '18rem' }}>
-				<Link to={`/popular/${movie.id}`}>
-					<Card.Img variant="top" src={imgURL + movie.poster_path} alt='movie poster' />
-				</Link>
-				<Card.Body>
-					<Card.Title>{movie.title}</Card.Title>
-					<Card.Text>
-						IMDB:  {movie.vote_average}
-					</Card.Text>
-					<Button variant="primary">Go somewhere</Button>
-				</Card.Body>
-			</Card>
+			<CardGroup style={{ marginBottom: '3rem' }}>
+				<Card border="dark" style={{ width: '18rem' }, { height: '32rem' }}>
+					<Link to={`/popular/${movie.id}`}>
+						<Card.Img variant="top" src={imgURL + movie.poster_path} alt='movie poster' style={{ height: '24rem' }} />
+					</Link>
+					<Card.Body>
+						<Card.Title>{movie.title}</Card.Title>
+						<Card.Text>
+							IMDB:  {movie.vote_average}
+						</Card.Text>
+					</Card.Body>
+				</Card>
+			</CardGroup>
 		</Col>
 	)
 	return (

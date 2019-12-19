@@ -1,10 +1,9 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { initializeFiltered } from './reducers/movieReducer'
 import { initializePopular } from './reducers/popularReducer'
-/* import { initalizeImages } from './reducers/imagesReducer'
- */import movieService from './services/movies'
+import { initializeSingleMovie } from './reducers/singleMovieReducer'
 import Movies from './components/Movies'
 import Movie from './components/Movie'
 import PopularMovies from './components/PopularMovies'
@@ -17,23 +16,35 @@ import { Container } from 'react-bootstrap'
 
 const App = (props) => {
 
-	useEffect(() => {
-		props.initializeFiltered(props.filter)
-	}, [props.filter])
+	const fetchFiltered = props.initializeFiltered
+	const fetchPopular = props.initializePopular
+
+	const realFilter = (props.filter.length === 0) ? 'dgsdgsgsgsgsdgsdgsdgsg' : props.filter
+
+	useEffect(() => { fetchFiltered(realFilter) }, [props.filter]) 
+	useEffect(() => { fetchPopular() }, [fetchPopular]) 
+
+
+
+/* 	useEffect(() => {
+		if (props.filter.length === 0) {
+			return props.initializePopular()
+		} else {
+			props.initializeFiltered(props.filter)
+		}
+	}, [])
 
 	useEffect(() => {
 		props.initializePopular()
-	}, [props])
-	/* 
-		useEffect(() => {
-			props.initalizeImages(props.movies.poster_path)
-		}, [props]) */
+	}, []) */
+
 
 	const movieById = (id) =>
 		props.movies.find(a => a.id === Number(id))
 
 	const popularById = (id) =>
 		props.popular.find(a => a.id === Number(id))
+
 
 	return (
 		<Container>
@@ -46,12 +57,9 @@ const App = (props) => {
 				<Route exact path="/search" render={() =>
 					<Movies />
 				} />
-				<Route exact path="/search/:id" render={({ match }) =>
-					<Movie movie={movieById(match.params.id)} />
+				<Route exact path="/search/:id" render={(props) => <Movie {...props} key={props.match.params.id} />} />
 				} />
-				<Route exact path="/popular/:id" render={({ match }) =>
-					<Movie movie={popularById(match.params.id)} />
-				} />
+				<Route exact path="/popular/:id" render={(props) => <Movie {...props} key={props.match.params.id} />} />
 			</Router>
 
 		</Container>
@@ -65,4 +73,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps, { initializePopular, initializeFiltered })(App)
+export default connect(mapStateToProps, { initializePopular, initializeFiltered, initializeSingleMovie })(App)
